@@ -410,8 +410,8 @@ TMedianCut.prototype = {
 // -----------------------
 //  TGIFAnime            
 // -----------------------
-// imagelist   : imagelistオブジェクト 
-// repeatcount : 繰り返し回数(0は無限)
+// imagelist   : ImageListオブジェクト 
+// repeatcount : アニメの繰り返し回数(0は無限)
 function TGIFAnime(imagelist,repeatcount) {
   this.MAX_DICTIONARY = 4096;  // 最大辞書数
   this.MAX_BLOCKSIZE  = 254;   // 最大イメージデータ数
@@ -1150,7 +1150,7 @@ TGIFAnime.prototype = {
     
     // GIFファイルの生成     
     // FileName : ファイル名
-    // r,g,b    : 透明色    
+    // r,g,b    : 透明色 ※ImageList[index]['transflg']が全てfalseならば省略可能  
     SaveToFile: function (FileName,r,g,b) {
       var F = this.SaveToStream(r,g,b);
     
