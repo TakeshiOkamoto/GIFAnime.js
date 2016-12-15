@@ -1150,7 +1150,7 @@ TGIFAnime.prototype = {
     
     // GIFファイルの生成     
     // FileName : ファイル名
-    // r,g,b    : 透明色 ※ImageList[index]['transflg']が全てfalseならば省略可能  
+    // r,g,b    : 背景を透明にする色 ※ImageList[index]['transflg']が全てfalseならば省略可能  
     SaveToFile: function (FileName,r,g,b) {
       var F = this.SaveToStream(r,g,b);
     
