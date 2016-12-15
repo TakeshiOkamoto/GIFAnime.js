@@ -410,7 +410,7 @@ TMedianCut.prototype = {
 // -----------------------
 //  TGIFAnime            
 // -----------------------
-// imagedata   : ImageDataオブジェクト 
+// imagelist   : imagelistオブジェクト 
 // repeatcount : 繰り返し回数(0は無限)
 function TGIFAnime(imagelist,repeatcount) {
   this.MAX_DICTIONARY = 4096;  // 最大辞書数
