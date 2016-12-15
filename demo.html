@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+table{
+  margin: 0 8px 0 18px;  
+  border: 1px solid #1e90ff;  
+  border-collapse: collapse;
+}
+
+table th{
+  padding:5px;
+  font-size:14px;  
+  border: 1px solid #1e90ff;
+  background:#f0f8ff;
+}
+
+table td{
+  padding:5px;
+  font-size:14px;
+  border:1px solid silver;
+  background-color:#ddd;
+}
+</style>
+<script src="GIFAnime.js"></script>
+<script>
+var src_img,src_canvas,src_ctx;
+
+// ImageList Object (including settings)
+var imageList = [];
+
+// Transparent color : White color
+// (透明色 : 白色)
+var r=255,g=255,b=255;
+
+// overlaid (1: Leave the image in the next frame 2: Do not leave images in the next frame)
+// When there is no transparent color, it becomes 2
+// (重ね方  1:次回のフレームに画像を残す 2:次回のフレームに画像を残さない ※透明色が無い場合は2となる)
+var overlaid;
+
+// Display time  "1 second = 100" and the default "50" will be "0.5 seconds". (0-65535)
+// (表示時間  「1秒=100」でデフォルトの「50」は「0.5秒」となります。[0-65535])
+var delaytime = 50;
+
+// Number of repetitions of animation (0 is infinite)
+// The number of times may vary depending on the browser. 
+// (アニメーションの繰り返し回数 [0は無限] ※ブラウザによって回数が異なる場合があります。)
+var repeatcount = 0;  
+  
+window.onload = function () {  
+  src_img = document.getElementById("SrcImage");
+  src_canvas = document.getElementById("SrcCanvas");
+  src_ctx = src_canvas.getContext("2d");        
+}
+
+function overlaid(value){      
+                     
+  // Transparent flag (true or false)
+  // 透明フラグ (true : 透明あり false : 透明なし)  
+  var transflg; 
+  if(value === 1){
+    transflg = true;
+  }else{
+    transflg = false;    
+  }     
+      
+  for(var i = 0; i < 3; i++){
+    
+    // Generate ImageData 
+    // (ImageDataの生成)    
+    var src_img = document.getElementById("SrcImage" + (i+1));
+    src_canvas.width  = src_img.width;
+    src_canvas.height = src_img.height;        
+    src_ctx.drawImage(src_img,0,0);  
+    imageList[i] = src_ctx.getImageData(0,0,src_canvas.width,src_canvas.height);   
+    
+    // Reduce the color to 256 colors 
+    // when the number of colors of the image is larger than 256 colors
+    // (画像の色数が256色より多い場合は256色に減色する)
+    var MedianCut = null;
+    var colors = getColorInfo(imageList[i]);   
+    if(colors.length > 256){   
+      MedianCut = new TMedianCut(imageList[i],colors);
+      MedianCut.run(256,true); 
+    }                                     
+    
+    // ImageList settings
+    // (ImageListの設定)
+    imageList[i]['transflg']  = transflg;
+    imageList[i]['overlaid']  = value; 
+    imageList[i]['delaytime'] = delaytime;    
+    
+    // Setting of color palette
+    // (カラーパレットの設定)
+    if(MedianCut){
+      imageList[i]['colors'] = MedianCut.rep_color;
+    }else{
+      imageList[i]['colors'] = colors;
+    }        
+  }
+  
+  // Generation of GIF animation    
+  // GIFアニメの生成
+  GIFWriter = new TGIFAnime(imageList,repeatcount);
+  GIFWriter.SaveToFile("untitle.gif",r,g,b);
+}  
+</script>
+</head>
+<body>
+<canvas id="SrcCanvas" style="display:none;"></canvas>
+<p>[Original image]</p>
+<table>
+ <tr><th>Image1<br>(48x48)</th><th>Image2<br>(48x48)</th><th>Image3<br>(48x48)</th></tr>
+ <tr><td><img id="SrcImage1" src="1.png"></td>
+     <td><img id="SrcImage2" src="2.png"></td>
+     <td><img id="SrcImage3" src="3.png"></td></tr>
+</table>
+<p>[Types of animation]</p>
+<table>
+ <tr><th>overlaid = 1<br>transflg = true</th><th>overlaid = 2<br>transflg = false</th></tr>
+ <tr><td><img  src="overlaid1.gif"></td><td><img  src="overlaid2.gif"></td></tr>
+ <tr><td><button onclick="overlaid(1);" style="font-size:24px;">Output1</button></td>
+     <td><button onclick="overlaid(2);" style="font-size:24px;">Output2</button> 
+</td></tr>
+</table>
+</body>
+</html>
