@@ -101,9 +101,13 @@ function overlaid(value){
   }
   
   // Generation of GIF animation    
-  // GIFアニメの生成
+  // (GIFアニメの生成)
   GIFWriter = new TGIFAnime(imageList,repeatcount);
-  GIFWriter.SaveToFile("untitle.gif",r,g,b);
+  if(transflg){
+    GIFWriter.SaveToFile("untitle.gif",r,g,b);
+  }else{
+    GIFWriter.SaveToFile("untitle.gif");
+  }
 }  
 </script>
 </head>
