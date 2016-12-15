@@ -12,7 +12,7 @@ Japanese
 ## How to use 
 
 Japanese  
-[準備中](準備中)  
+[http://www.petitmonte.com/javascript/howto_gifanime_js.html](http://www.petitmonte.com/javascript/howto_gifanime_js.html)  
 
 English  
 Please look at demo.html.
